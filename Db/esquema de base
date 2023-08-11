@@ -1,0 +1,80 @@
+create database CitasMedicas;
+go
+use CitasMedicas;
+
+create schema CitasMedicas;
+
+create table paciente (
+id_paciente int not null primary key identity,
+nombre varchar(50),
+apellido varchar (50),
+cedula int,
+fecha_nacimiento date,
+tipo_sangre varchar(50),
+correo varchar(50),
+edad int,
+provincia varchar(50),
+canton varchar(50)
+);
+
+create table doctor (
+id_doctor int not null primary key identity,
+nombre_doc varchar(50),
+apellido_doc varchar(50),
+rol varchar(50),
+especialidad varchar(50),
+num_telf numeric(8,2),
+correo varchar(50),
+);
+
+create table cita_medica (
+id_cita int not null primary key identity,
+id_paciente int,
+id_doctor int,
+fecha_tiempo datetime,
+ubicacion_cita varchar(50),
+estado_cita varchar(50)
+
+constraint fk_cita_medica_id_paciente foreign key (id_paciente) references paciente(id_paciente),
+constraint fk_cita_medica_id_doctor foreign key (id_doctor) references doctor(id_doctor)
+);
+
+create table Registro_Medico (
+id_registro int not null primary key identity,
+id_doctor int,
+citas_disponibles int,
+fecha_tiempo datetime,
+ubicacion_cita varchar(50),
+estado_cita varchar(50)
+
+constraint fk_Registro_Medico_citas_disponibles foreign key (citas_disponibles) references cita_medica(id_cita)
+);
+
+create table historial_medico (
+id_historial int not null primary key identity,
+id_paciente int,
+anteced_fam_enferm varchar(50),
+medicacion_anterior varchar(50),
+enfermed_cronic varchar(50),
+alergias varchar(50)
+
+constraint fk_historial_medico_id_paciente foreign key (id_paciente) references paciente(id_paciente),
+);
+
+create table horario_doc (
+id_horario int not null primary key identity,
+id_doctor int,
+hora_disponible datetime,
+estado_dia varchar
+
+constraint fk_horario_doc_id_doctor foreign key (id_doctor) references doctor(id_doctor),
+);
+
+insert into paciente (nombre, apellido, cedula, fecha_nacimiento, tipo_sangre, correo, edad, provincia, canton) 
+values ('Eduardo','Medino',0997465208,'1993-02-15','A-','edmedino@gmail.com','30','Guayas', 'Letamendi'),
+('Manuel','Ronquillo',0945893010,'1984-10-30','O+','manuel_ronquillo@gmail.com','50','Guayas', 'ni idea'),
+('Carla','Hernandez',0953128955,'2000-12-02','B+','c_hernandez@gmail.com','27','Guayas', 'Letamendi');
+
+delete from paciente where canton = 'ni idea';
+
+select * from paciente
